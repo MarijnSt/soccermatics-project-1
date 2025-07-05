@@ -62,11 +62,11 @@ def get_dribbles_single_match(df, shot_window=15):
 
         # Init new columns
         dribbles_df['danger_dribble'] = False
-        dribbles_df['xg_from_dribble'] = 0
+        dribbles_df['xg_from_dribble'] = 0.0
         dribbles_df['dribble_to_goal'] = False
 
         # Look for danger dribbles
-        for _, dribble in dribbles_df.iterrows():
+        for idx, dribble in dribbles_df.iterrows():
             # Skip if dribble is not successful
             if dribble['outcome_name'] != 'Complete':
                 continue
@@ -96,18 +96,15 @@ def get_dribbles_single_match(df, shot_window=15):
                 # Get the matching shots data
                 df_matching_shots = df_team_shots.loc[matching_shots]
                 
-                # Create a row for each dribble-shot combination
-                for _, shot in df_matching_shots.iterrows():
-                    dribble['danger_dribble'] = True
-                    dribble['dribble_to_shot_xg'] = shot['shot_statsbomb_xg']
-                    dribble['dribble_to_goal'] = 1 if shot['outcome_name'] == 'Goal' else 0
+                # Update dataframe
+                dribbles_df.at[idx, 'danger_dribble'] = True
+                dribbles_df.at[idx, 'xg_from_dribble'] = df_matching_shots['shot_statsbomb_xg'].values[0]
+                dribbles_df.at[idx, 'dribble_to_goal'] = True if df_matching_shots['outcome_name'].values[0] == 'Goal' else False
 
         dribbles_list.append(dribbles_df)
 
     # Concatenate all dribbles
     df_dribbles = pd.concat(dribbles_list)
-
-    
 
     # Filter out columns that are not needed
     df_dribbles = df_dribbles[[
@@ -121,6 +118,7 @@ def get_dribbles_single_match(df, shot_window=15):
 
 def get_all_dribbles(match_ids, df):
     """
+
     Get all dribbles for a season and add xG from danger dribbles.
 
     Parameters
