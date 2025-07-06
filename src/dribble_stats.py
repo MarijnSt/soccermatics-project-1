@@ -2,8 +2,6 @@
 This module contains functions to calculate the dribble stats for players.
 """
 
-import pandas as pd
-
 def calculate_dribble_stats(df):
     """
     Calculate the number of dribbles for a player in a season.
