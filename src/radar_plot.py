@@ -7,10 +7,10 @@ from matplotlib.offsetbox import OffsetImage, AnnotationBbox
 import matplotlib.image as mpimg
 from mplsoccer import PyPizza
 
-from src.data_plots import filter_players_by_position, calculate_radar_plot_data
+from src.data_plots import calculate_radar_plot_data
 
 
-def create_radar_plot(df, player_id, position):
+def create_radar_plot(df, player_id):
     """
     Create a radar plot for a player.
 
@@ -20,8 +20,6 @@ def create_radar_plot(df, player_id, position):
         The dataframe with player stats.
     player_id: int
         The id of the player to calculate the data for.
-    position: str
-        The position of the player to calculate the data for.
 
     Returns
     -------
@@ -32,12 +30,9 @@ def create_radar_plot(df, player_id, position):
     # Get player and team name
     team_name = df.loc[df["player_id"] == player_id, "team_name"].values[0]
     player_name = df.loc[df["player_id"] == player_id, "player_short_name"].values[0]
-    
-    # Filter players by position
-    df_filtered = filter_players_by_position(df, position)
 
     # Get player values and percentiles
-    player_values, player_percentiles = calculate_radar_plot_data(df_filtered, player_id)
+    player_values, player_percentiles = calculate_radar_plot_data(df, player_id)
 
     # Plot dimensions
     title_height_ratio = 0.15
@@ -92,7 +87,7 @@ def create_radar_plot(df, player_id, position):
 
     # Add heading
     heading_ax.text(0.01, 0.8, f"{player_name} - {team_name}", fontsize=h1_size, ha='left', va='center')
-    heading_ax.text(0.01, 0.55, f'Per 90 stats vs other {position}s* at Euro 2024', fontsize=p_size, ha='left', va='center', alpha=alpha)
+    heading_ax.text(0.01, 0.55, f'Per 90 stats vs other dribblers* at Euro 2024', fontsize=p_size, ha='left', va='center', alpha=alpha)
 
     # Add Euros 2024 logo
     logo = mpimg.imread('../euro_2024_logo.png')

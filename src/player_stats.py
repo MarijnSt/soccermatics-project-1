@@ -2,7 +2,6 @@
 This module contains functions to calculate the full player stats for a given player.
 """
 
-from src.matches import get_all_match_ids, load_all_events
 from src.dribbles import get_all_dribbles
 from src.basic_stats import calculate_goals_assists, calculate_shots_xg
 from src.dribble_stats import calculate_dribble_stats, calculate_danger_dribble_stats
@@ -32,16 +31,16 @@ def calculate_per90_columns(df, columns, playing_time_column="playing_time"):
     return df_filtered
 
 
-def calculate_player_stats(competition_id, season_id, min_playing_time=16200, min_attempted_dribbles=10):
+def calculate_player_stats(match_ids, df_all_events, min_playing_time=16200, min_attempted_dribbles=10):
     """ 
     Create a dataframe with all player stats needed for the radar plot.
 
     Parameters
     ----------
-    competition_id: int
-        The id of the competition
-    season_id: int
-        The id of the season
+    match_ids: list
+        A list of match ids to get the player stats for.
+    df_all_events: pd.DataFrame
+        A dataframe with all events for all matches.
     min_playing_time: int
         The minimum playing time in seconds.
     min_attempted_dribbles: int
@@ -52,12 +51,6 @@ def calculate_player_stats(competition_id, season_id, min_playing_time=16200, mi
     df_player_stats: pd.DataFrame
         A dataframe with all relevant player stats.
     """
-
-    # Get all match ids
-    match_ids = get_all_match_ids(competition_id, season_id)
-
-    # Combine all events for all matches
-    df_all_events = load_all_events(match_ids)
 
     # Get all players in the tournament
     df_player_info = get_player_info(match_ids)
