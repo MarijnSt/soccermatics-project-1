@@ -30,7 +30,9 @@ def get_dribbles_single_match(df, shot_window=15):
 
     # Relevant columns
     relevant_columns = [
-        "match_id", "period", "minute", "second", "type_name", "team_name", "player_id", "outcome_name", "x", "y", "shot_statsbomb_xg"
+        "match_id", "period", "minute", "second", 
+        "type_name", "team_name", "player_id", 
+        "outcome_name", "x", "y", "shot_statsbomb_xg"
     ]
 
     # Init dribbles list

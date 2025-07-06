@@ -180,5 +180,5 @@ def create_radar_plot(df, player_id, position):
     # convert player name to lowercase and replace spaces with underscores
     player_name_filename = player_name.lower().replace(" ", "_")
 
-    fig.savefig(f'../generated_radar_plots/{player_name_filename}_radar.png', **default_kwargs)
+    fig.savefig(f'../generated_images/radar_plots/{player_name_filename}_radar.png', **default_kwargs)
     plt.show()
