@@ -41,7 +41,7 @@ def filter_players_by_position(df, position):
     return df[df['positions'].apply(lambda x: bool(x & position_ids))]
 
 
-def calculate_radar_plot_data(df, player_id, min_playing_time=16200, min_attempted_dribbles=10):
+def calculate_radar_plot_data(df, player_id):
     """
     Calculate the data for the radar plot.
 
@@ -51,10 +51,6 @@ def calculate_radar_plot_data(df, player_id, min_playing_time=16200, min_attempt
         The dataframe with the player stats filtered by position (defender, midfielder, forward).
     player_id: int
         The id of the player to calculate the data for.
-    min_playing_time: int
-        The minimum playing time in seconds.
-    min_attempted_dribbles: int
-        The minimum attempted dribbles.
 
     Returns
     -------
@@ -71,9 +67,6 @@ def calculate_radar_plot_data(df, player_id, min_playing_time=16200, min_attempt
     ]
 
     columns_to_invert = ["failed_dribbles_per90"]
-
-    # Filter out players
-    df = df[(df["playing_time"] >= min_playing_time) & (df["attempted_dribbles"] >= min_attempted_dribbles)]
 
     # Create copy for percentile calculation
     df_percentile = df.copy()

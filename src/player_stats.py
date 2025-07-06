@@ -32,7 +32,7 @@ def calculate_per90_columns(df, columns, playing_time_column="playing_time"):
     return df_filtered
 
 
-def calculate_player_stats(competition_id, season_id):
+def calculate_player_stats(competition_id, season_id, min_playing_time=16200, min_attempted_dribbles=10):
     """ 
     Create a dataframe with all player stats needed for the radar plot.
 
@@ -42,6 +42,10 @@ def calculate_player_stats(competition_id, season_id):
         The id of the competition
     season_id: int
         The id of the season
+    min_playing_time: int
+        The minimum playing time in seconds.
+    min_attempted_dribbles: int
+        The minimum attempted dribbles.
 
     Returns
     -------
@@ -91,6 +95,9 @@ def calculate_player_stats(competition_id, season_id):
 
     # Fill missing values with 0
     df_player_stats.fillna(0, inplace=True)             # Each column that can be empty is a number, so we can use fillna with 0
+
+    # Filter out players
+    df_player_stats = df_player_stats[(df_player_stats["playing_time"] >= min_playing_time) & (df_player_stats["attempted_dribbles"] >= min_attempted_dribbles)]
     
     # Convert int columns
     df_player_stats["playing_time"] = df_player_stats["playing_time"].astype(int)
