@@ -90,7 +90,7 @@ def create_radar_plot(df, player_id):
     heading_ax.text(0.01, 0.55, f'Per 90 stats vs other dribblers* at Euro 2024', fontsize=p_size, ha='left', va='center', alpha=alpha)
 
     # Add Euros 2024 logo
-    logo = mpimg.imread('../euro_2024_logo.png')
+    logo = mpimg.imread('euro_2024_logo.png')
     imagebox = OffsetImage(logo, zoom=0.2)
     ab = AnnotationBbox(imagebox, (0.98, 0.7), xycoords='axes fraction', box_alignment=(1, 0.5), frameon=False)
     heading_ax.add_artist(ab)
@@ -174,6 +174,7 @@ def create_radar_plot(df, player_id):
     
     # convert player name to lowercase and replace spaces with underscores
     player_name_filename = player_name.lower().replace(" ", "_")
-
-    fig.savefig(f'../generated_images/radar_plots/{player_name_filename}_radar.png', **default_kwargs)
-    plt.show()
+    path = f'generated_images/radar_plots/{player_name_filename}_{team_name}_radar.png'
+    fig.savefig(path, **default_kwargs)
+    
+    return fig

@@ -1,6 +1,7 @@
 import streamlit as st
 import pandas as pd
 import numpy as np
+from src.radar_plot import create_radar_plot
 
 # Get player stats
 df_player_stats = pd.read_parquet("data/player_stats.parquet")
@@ -18,10 +19,6 @@ with col1:
 with col2:
     dribbles_filter = st.number_input("Minimum dribbles", min_value=0, max_value=100, value=10, step=1)
 
-# st.markdown(f"Your selected options: {minutes_played_filter}")
-# st.markdown(f"Your selected options: {dribbles_filter}")
-
-
 # Filter player stats
 @st.cache_data
 def filter_player_stats(df_player_stats, minutes_played_filter, dribbles_filter):
@@ -35,9 +32,6 @@ def filter_player_stats(df_player_stats, minutes_played_filter, dribbles_filter)
 
     # Convert playing time to minutes for display
     df["playing_time"] = df["playing_time"] / 60
-
-    # Return relevant columns
-    # df = df[]
 
     return df
 
@@ -122,12 +116,14 @@ selected_player = st.dataframe(
             help="Average xG per danger dribble",
             format="%.4f",
         ),
+
     },
     column_order=[
         "player_short_name", "team_name", "playing_time",
         "goals", "assists", "shots", "shots_xg",
         "attempted_dribbles", "completed_dribbles", "failed_dribbles", "dribble_success_rate",
-        "danger_dribbles", "danger_dribbles_xg", "dribbles_to_goals", "xg_per_danger_dribble"
+        "danger_dribbles", "danger_dribbles_xg", "dribbles_to_goals", "xg_per_danger_dribble",
+
     ],
     hide_index=True,
     selection_mode="single-row",
@@ -142,6 +138,16 @@ if not selected_player["selection"]["rows"]:
 selected_id = selected_player["selection"]["rows"][0]
 selected_player_id = df_player_stats_filtered.iloc[selected_id]["player_id"]
 st.write(f"Selected player: {selected_player_id}")
+
+# Show radar plot
+def show_radar_plot(df, player_id):
+    fig = create_radar_plot(df, player_id)
+    return fig
+
+fig = show_radar_plot(df_player_stats_filtered, selected_player_id)
+st.pyplot(fig)
+
+
 
 # st.dataframe(df_dribbles)
 # st.write(f"Number of dribbles: {len(df_dribbles)}")
