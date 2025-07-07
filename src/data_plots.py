@@ -15,7 +15,7 @@ def filter_players_by_position(df, position):
     df: pd.DataFrame
         DataFrame with player stats including 'positions' column.
     position: str
-        The position to filter by. Valid positions are: defender, midfielder and forward.
+        The position to filter by. Valid positions are: Defenders, Midfielders and Forwards.
     
     Returns
     -------
@@ -25,18 +25,20 @@ def filter_players_by_position(df, position):
     Raises
     ------
     ValueError
-        If position is not one of the accepted values: "defender", "midfielder", "forward".
+        If position is not one of the accepted values: "Defenders", "Midfielders" or "Forwards".
     """
     # Get position ids
     match position:
-        case "defender":
+        case "Defenders":
             position_ids = {2, 3, 4, 5, 6, 7, 8}
-        case "midfielder":
+        case "Midfielders":
             position_ids = {9, 10, 11, 12, 13, 14, 15, 16}
-        case "forward":
+        case "Forwards":
             position_ids = {17, 18, 19, 20, 21, 22, 23, 24, 25}
         case _:
-            raise ValueError(f"Invalid position: {position}. Valid positions are: defender, midfielder and forward.")
+            raise ValueError(f"Invalid position: {position}. Valid positions are: Defenders, Midfielders and Forwards.")
+    
+    print(position_ids)
     
     return df[df['positions'].apply(lambda x: bool(x & position_ids))]
 
