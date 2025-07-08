@@ -48,10 +48,10 @@ with col2:
 
 # Filter player stats
 df_player_stats_filtered = filter_player_stats(df_player_stats, minutes_played_filter, dribbles_filter)
-st.write(f"Number of players: {len(df_player_stats_filtered)}")
+# st.write(f"Number of players: {len(df_player_stats_filtered)}")
 
 # Select a player
-st.write(f"Select a player to see their dribble analysis")
+st.subheader(f"Select a player to see their stats and dribbles")
 selected_player = st.dataframe(
     df_player_stats_filtered,
     column_config={
@@ -151,7 +151,7 @@ selected_id = selected_player["selection"]["rows"][0]
 selected_player_id = df_player_stats_filtered.iloc[selected_id]["player_id"]
 selected_player_name = df_player_stats_filtered.iloc[selected_id]["player_short_name"]
 selected_player_team = df_player_stats_filtered.iloc[selected_id]["team_name"]
-st.write(f"Selected player: {selected_player_id} - {selected_player_name} ({selected_player_team})")
+# st.write(f"Selected player: {selected_player_id} - {selected_player_name} ({selected_player_team})")
 
 # Show radar plot
 fig, path = show_radar_plot(df_player_stats_filtered, selected_player_id, minutes_played_filter, dribbles_filter)
