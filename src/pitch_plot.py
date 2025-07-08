@@ -126,12 +126,15 @@ def create_pitch_plot(df_dribbles, player_id, player_name, team_name):
         0.4
     )
 
+    # Size points based on xG
+    sizes = 100 + (df_player_dribbles['xg_from_dribble'] * 1500)
+
     # Plot all points at once
     pitch.scatter(
         df_player_dribbles['x'], 
         df_player_dribbles['y'], 
         c=colors, 
-        s=120, 
+        s=sizes, 
         alpha=alphas, 
         edgecolors="none", 
         ax=main_ax
