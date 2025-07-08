@@ -3,6 +3,6 @@ streamlit
 pandas
 numpy
 matplotlib
-# mplsoccer
-# pathlib
-# scipy
+mplsoccer
+pathlib
+scipy
