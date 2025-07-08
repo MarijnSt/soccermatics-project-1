@@ -140,12 +140,14 @@ selected_player_id = df_player_stats_filtered.iloc[selected_id]["player_id"]
 st.write(f"Selected player: {selected_player_id}")
 
 # Show radar plot
-def show_radar_plot(df, player_id):
-    fig = create_radar_plot(df, player_id)
-    return fig
+@st.cache_data(show_spinner="Creating radar plot...")
+def show_radar_plot(df, player_id, minutes_played_filter, dribbles_filter):
+    fig, path = create_radar_plot(df, player_id, minutes_played_filter, dribbles_filter)
+    return fig, path
 
-fig = show_radar_plot(df_player_stats_filtered, selected_player_id)
+fig, path = show_radar_plot(df_player_stats_filtered, selected_player_id, minutes_played_filter, dribbles_filter)
 st.pyplot(fig)
+st.image(path)
 
 
 

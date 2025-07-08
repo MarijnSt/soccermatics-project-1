@@ -10,7 +10,7 @@ from mplsoccer import PyPizza
 from src.data_plots import calculate_radar_plot_data
 
 
-def create_radar_plot(df, player_id):
+def create_radar_plot(df, player_id, minutes_played_filter, dribbles_filter):
     """
     Create a radar plot for a player.
 
@@ -20,6 +20,10 @@ def create_radar_plot(df, player_id):
         The dataframe with player stats.
     player_id: int
         The id of the player to calculate the data for.
+    minutes_played_filter: int
+        The minimum minutes played to be included in the plot.
+    dribbles_filter: int
+        The minimum number of dribbles to be included in the plot.
 
     Returns
     -------
@@ -160,7 +164,7 @@ def create_radar_plot(df, player_id):
 
 
     # LEGEND
-    legend_ax.text(0.01, 0.25, '*: players with at least 270 minutes and 10 attempted dribbles', fontsize=label_size, ha='left', va='center', alpha=alpha)
+    legend_ax.text(0.01, 0.25, f'*: players with at least {minutes_played_filter} minutes and {dribbles_filter} attempted dribbles', fontsize=label_size, ha='left', va='center', alpha=alpha)
     legend_ax.text(0.01, 0.01, 'Danger dribbles: dribbles that end in a shot within 15 seconds', fontsize=label_size, ha='left', va='center', alpha=alpha)
     legend_ax.text(0.99, 0.01, 'Data from StatsBomb', fontsize=label_size, ha='right', va='center', alpha=alpha)
 
@@ -174,7 +178,7 @@ def create_radar_plot(df, player_id):
     
     # convert player name to lowercase and replace spaces with underscores
     player_name_filename = player_name.lower().replace(" ", "_")
-    path = f'generated_images/radar_plots/{player_name_filename}_{team_name}_radar.png'
+    path = f'generated_images/radar_plots/{player_name_filename}_{minutes_played_filter}min_{dribbles_filter}dribbles_radar.png'
     fig.savefig(path, **default_kwargs)
     
-    return fig
+    return fig, path
