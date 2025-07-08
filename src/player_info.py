@@ -3,6 +3,7 @@ This module contains functions to get the player info from the StatsBomb API.
 """
 
 import pandas as pd
+from collections import Counter
 from mplsoccer import Sbopen
 
 # Init StatsBomb parser
@@ -30,12 +31,47 @@ def get_player_positions(match_id):
     # Group by player and collect unique positions
     df_player_positions = (
         df.groupby('player_id')['position_id']
-        .agg(lambda x: set(x.astype(int)))
+        .agg(lambda x: x.astype(int).value_counts().to_dict())
         .reset_index()
         .rename(columns={'position_id': 'positions'})
     )
     
     return df_player_positions
+
+
+def get_position_label(positions):
+    """
+    Get the position label for a player based on the positions they played in a game.
+
+    Parameters
+    ----------
+    positions: dict
+        A dictionary with the positions and the count of how many events the player has in certain positions.
+
+    Returns
+    -------
+    str
+        The position label for the player.
+    """
+    keeper_ids = {1}
+    defender_ids = {2, 3, 4, 5, 6, 7, 8}
+    midfielder_ids = {9, 10, 11, 12, 13, 14, 15, 16}
+    forward_ids = {17, 18, 19, 20, 21, 22, 23, 24, 25}
+
+    scores = {
+        "keeper": sum(count for pos, count in positions.items() if pos in keeper_ids),
+        "defender": sum(count for pos, count in positions.items() if pos in defender_ids),
+        "midfielder": sum(count for pos, count in positions.items() if pos in midfielder_ids),
+        "forward": sum(count for pos, count in positions.items() if pos in forward_ids),
+    }
+
+    # If the player has no events in any position, return "dnp" (did not play)
+    if sum(scores.values()) == 0:
+        return "dnp"
+
+    # Get the label with the highest score
+    return max(scores, key=scores.get)
+
 
 def get_player_info(match_ids):
     """
@@ -88,9 +124,15 @@ def get_player_info(match_ids):
             'player_name': 'first',
             'player_short_name': 'first', 
             'team_name': 'first',
-            'positions': lambda x: set().union(*x.dropna())  # Combine all position sets and drop null values
+            'positions': lambda x: dict(sum((Counter(d) for d in x if isinstance(d, dict)), Counter()))
         })
         .reset_index()
     )
+
+    # Add position label
+    df_unique_players['position'] = df_unique_players['positions'].apply(get_position_label)
+
+    # Drop positions column
+    df_unique_players.drop(columns=['positions'], inplace=True)
 
     return df_unique_players
