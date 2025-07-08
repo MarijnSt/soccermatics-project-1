@@ -5,10 +5,17 @@ from src.radar_plot import create_radar_plot
 from src.pitch_plot import create_pitch_plot
 
 @st.cache_data
-def filter_player_stats(df_player_stats, minutes_played_filter, dribbles_filter):
+def filter_player_stats(df_player_stats, position_filter, minutes_played_filter, dribbles_filter):
     df = df_player_stats.copy()
 
     # Apply filters
+    if position_filter != "All":
+        if position_filter == "Defenders":
+            df = df[df["position"] == "defender"]
+        elif position_filter == "Midfielders":
+            df = df[df["position"] == "midfielder"]
+        elif position_filter == "Forwards":
+            df = df[df["position"] == "forward"]
     if minutes_played_filter:
         df = df[df["playing_time"] >= minutes_played_filter * 60]
     if dribbles_filter:
@@ -42,11 +49,17 @@ st.write("This app analyzes the dribbling performance of players at Euro 2024.")
 # Minutes and dribbles filters
 with st.sidebar:
     st.subheader("Filter players")
+    position_filter = st.segmented_control(
+        "Position", 
+        ["All", "Defenders", "Midfielders", "Forwards"],
+        default="All"
+    )
     minutes_played_filter = st.number_input("Minimum minutes played", min_value=0, max_value=900, value=270, step=1)
     dribbles_filter = st.number_input("Minimum dribbles", min_value=0, max_value=100, value=10, step=1)
 
 # Filter player stats
-df_player_stats_filtered = filter_player_stats(df_player_stats, minutes_played_filter, dribbles_filter)
+st.write(position_filter)
+df_player_stats_filtered = filter_player_stats(df_player_stats, position_filter, minutes_played_filter, dribbles_filter)
 # st.write(f"Number of players: {len(df_player_stats_filtered)}")
 
 # Select a player
