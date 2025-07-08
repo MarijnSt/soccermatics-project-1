@@ -194,4 +194,4 @@ def create_pitch_plot(df_dribbles, player_id, player_name, team_name):
     output_path = create_pitch_path(player_id)
     fig.savefig(output_path, **default_kwargs)
     
-    return fig, str(output_path)
+    return fig, output_path

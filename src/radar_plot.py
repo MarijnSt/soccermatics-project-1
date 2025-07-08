@@ -11,6 +11,13 @@ from pathlib import Path
 
 from src.data_plots import calculate_radar_plot_data
 
+# Get project root directory
+project_root = Path(__file__).parent.parent
+
+def create_radar_path(player_id, position_filter, minutes_played_filter, dribbles_filter):
+    output_path = project_root / 'generated_images' / 'radar_plots' / f'{player_id}_{minutes_played_filter}min_{dribbles_filter}drib_{position_filter}.png'
+    return str(output_path)
+
 
 def create_radar_plot(df, player_id, position_filter, minutes_played_filter, dribbles_filter):
     """
@@ -34,9 +41,6 @@ def create_radar_plot(df, player_id, position_filter, minutes_played_filter, dri
     fig: matplotlib.figure.Figure
         The radar plot.
     """ 
-    # Get project root directory
-    project_root = Path(__file__).parent.parent
-
     # Get player and team name
     team_name = df.loc[df["player_id"] == player_id, "team_name"].values[0]
     player_name = df.loc[df["player_id"] == player_id, "player_short_name"].values[0]
@@ -188,7 +192,7 @@ def create_radar_plot(df, player_id, position_filter, minutes_played_filter, dri
     }
     
     # Generate output path, save figure and return figure and path
-    output_path = project_root / 'generated_images' / 'radar_plots' / f'{player_id}_{minutes_played_filter}min_{dribbles_filter}drib.png'
+    output_path = create_radar_path(player_id, position_filter, minutes_played_filter, dribbles_filter)
     fig.savefig(output_path, **default_kwargs)
     
-    return fig, str(output_path)
+    return fig, output_path

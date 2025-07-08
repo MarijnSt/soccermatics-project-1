@@ -1,7 +1,7 @@
 import streamlit as st
 import pandas as pd
 import numpy as np
-from src.radar_plot import create_radar_plot
+from src.radar_plot import create_radar_plot, create_radar_path
 from src.pitch_plot import create_pitch_plot, create_pitch_path
 import os
 
@@ -28,19 +28,28 @@ def filter_player_stats(df_player_stats, position_filter, minutes_played_filter,
     return df
 
 
-@st.cache_data(show_spinner="Creating radar plot...")
 def show_radar_plot(df, player_id, position_filter, minutes_played_filter, dribbles_filter):
+    # Check if plot already exists
+    plot_path = create_radar_path(player_id, position_filter, minutes_played_filter, dribbles_filter)
+    print(plot_path)
+    if os.path.exists(plot_path):
+        print("Radar already exists")
+        return plot_path
+
+    print("Creating radar plot")
     fig, path = create_radar_plot(df, player_id, position_filter, minutes_played_filter, dribbles_filter)
-    return fig, path
+    return path
 
 
 def get_pitch_path(df_dribbles, player_id, player_name, team_name):
-    plot_path = create_pitch_path(player_id)
-    
     # Check if plot already exists
+    plot_path = create_pitch_path(player_id)
+    print(plot_path)
     if os.path.exists(plot_path):
+        print("Pitch already exists")
         return plot_path
 
+    print("Creating pitch plot")
     fig, path = create_pitch_plot(df_dribbles, player_id, player_name, team_name)
     return path
 
@@ -170,8 +179,8 @@ selected_player_team = df_player_stats_filtered.iloc[selected_id]["team_name"]
 # st.write(f"Selected player: {selected_player_id} - {selected_player_name} ({selected_player_team})")
 
 # Show radar plot
-fig, path = show_radar_plot(df_player_stats_filtered, selected_player_id, position_filter, minutes_played_filter, dribbles_filter)
-st.image(path)
+radar_path = show_radar_plot(df_player_stats_filtered, selected_player_id, position_filter, minutes_played_filter, dribbles_filter)
+st.image(radar_path)
 #st.pyplot(fig)
 
 # Show pitch plot
