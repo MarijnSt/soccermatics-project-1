@@ -28,8 +28,8 @@ def filter_player_stats(df_player_stats, position_filter, minutes_played_filter,
 
 
 @st.cache_data(show_spinner="Creating radar plot...")
-def show_radar_plot(df, player_id, minutes_played_filter, dribbles_filter):
-    fig, path = create_radar_plot(df, player_id, minutes_played_filter, dribbles_filter)
+def show_radar_plot(df, player_id, position_filter, minutes_played_filter, dribbles_filter):
+    fig, path = create_radar_plot(df, player_id, position_filter, minutes_played_filter, dribbles_filter)
     return fig, path
 
 
@@ -58,7 +58,6 @@ with st.sidebar:
     dribbles_filter = st.number_input("Minimum dribbles", min_value=0, max_value=100, value=10, step=1)
 
 # Filter player stats
-st.write(position_filter)
 df_player_stats_filtered = filter_player_stats(df_player_stats, position_filter, minutes_played_filter, dribbles_filter)
 # st.write(f"Number of players: {len(df_player_stats_filtered)}")
 
@@ -165,7 +164,7 @@ selected_player_team = df_player_stats_filtered.iloc[selected_id]["team_name"]
 # st.write(f"Selected player: {selected_player_id} - {selected_player_name} ({selected_player_team})")
 
 # Show radar plot
-fig, path = show_radar_plot(df_player_stats_filtered, selected_player_id, minutes_played_filter, dribbles_filter)
+fig, path = show_radar_plot(df_player_stats_filtered, selected_player_id, position_filter, minutes_played_filter, dribbles_filter)
 st.pyplot(fig)
 st.image(path)
 

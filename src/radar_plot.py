@@ -12,7 +12,7 @@ from pathlib import Path
 from src.data_plots import calculate_radar_plot_data
 
 
-def create_radar_plot(df, player_id, minutes_played_filter, dribbles_filter):
+def create_radar_plot(df, player_id, position_filter, minutes_played_filter, dribbles_filter):
     """
     Create a radar plot for a player.
 
@@ -22,6 +22,8 @@ def create_radar_plot(df, player_id, minutes_played_filter, dribbles_filter):
         The dataframe with player stats.
     player_id: int
         The id of the player to calculate the data for.
+    position_filter: str
+        The position of the player to calculate the data for.
     minutes_played_filter: int
         The minimum minutes played to be included in the plot.
     dribbles_filter: int
@@ -97,8 +99,9 @@ def create_radar_plot(df, player_id, minutes_played_filter, dribbles_filter):
     legend_ax.axis('off')
 
     # Add heading
+    dribblers_text = position_filter.lower() if position_filter != "All" else "dribblers"
     heading_ax.text(0.01, 0.8, f"{player_name} - {team_name}", fontsize=h1_size, ha='left', va='center')
-    heading_ax.text(0.01, 0.55, f'Per 90 stats vs other dribblers* at Euro 2024', fontsize=p_size, ha='left', va='center', alpha=alpha)
+    heading_ax.text(0.01, 0.55, f'Per 90 stats vs other {dribblers_text}* at Euro 2024', fontsize=p_size, ha='left', va='center', alpha=alpha)
 
     # Add Euros 2024 logo
     logo = mpimg.imread(project_root / 'assets' / 'euro_2024_logo.png')
@@ -171,7 +174,8 @@ def create_radar_plot(df, player_id, minutes_played_filter, dribbles_filter):
 
 
     # LEGEND
-    legend_ax.text(0.01, 0.25, f'*: players with at least {minutes_played_filter} minutes and {dribbles_filter} attempted dribbles', fontsize=label_size, ha='left', va='center', alpha=alpha)
+    players_text = position_filter.lower() if position_filter != "All" else "players"
+    legend_ax.text(0.01, 0.25, f'*: {players_text} with at least {minutes_played_filter} minutes and {dribbles_filter} attempted dribbles', fontsize=label_size, ha='left', va='center', alpha=alpha)
     legend_ax.text(0.01, 0.01, 'Danger dribbles: dribbles that end in a shot within 15 seconds', fontsize=label_size, ha='left', va='center', alpha=alpha)
     legend_ax.text(0.99, 0.01, 'Data provided by StatsBomb', fontsize=label_size, ha='right', va='center', alpha=alpha)
 
