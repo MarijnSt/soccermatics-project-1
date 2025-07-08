@@ -2,7 +2,8 @@ import streamlit as st
 import pandas as pd
 import numpy as np
 from src.radar_plot import create_radar_plot
-from src.pitch_plot import create_pitch_plot
+from src.pitch_plot import create_pitch_plot, create_pitch_path
+import os
 
 @st.cache_data
 def filter_player_stats(df_player_stats, position_filter, minutes_played_filter, dribbles_filter):
@@ -33,10 +34,15 @@ def show_radar_plot(df, player_id, position_filter, minutes_played_filter, dribb
     return fig, path
 
 
-@st.cache_data(show_spinner="Creating pitch plot...")
-def show_pitch_plot(df_dribbles, player_id, player_name, team_name):
+def get_pitch_path(df_dribbles, player_id, player_name, team_name):
+    plot_path = create_pitch_path(player_id)
+    
+    # Check if plot already exists
+    if os.path.exists(plot_path):
+        return plot_path
+
     fig, path = create_pitch_plot(df_dribbles, player_id, player_name, team_name)
-    return fig, path
+    return path
 
 
 # Get player stats and dribbles
@@ -165,10 +171,10 @@ selected_player_team = df_player_stats_filtered.iloc[selected_id]["team_name"]
 
 # Show radar plot
 fig, path = show_radar_plot(df_player_stats_filtered, selected_player_id, position_filter, minutes_played_filter, dribbles_filter)
-#st.pyplot(fig)
 st.image(path)
+#st.pyplot(fig)
 
 # Show pitch plot
-fig, path = show_pitch_plot(df_dribbles, selected_player_id, selected_player_name, selected_player_team)
+pitch_path = get_pitch_path(df_dribbles, selected_player_id, selected_player_name, selected_player_team)
+st.image(pitch_path)
 #st.pyplot(fig)
-st.image(path)

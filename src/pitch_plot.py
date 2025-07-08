@@ -10,6 +10,13 @@ from mplsoccer import Pitch
 import numpy as np
 from pathlib import Path
 
+# Get project root directory
+project_root = Path(__file__).parent.parent
+
+def create_pitch_path(player_id):
+    output_path = project_root / 'generated_images' / 'pitch_plots' / f'{player_id}.png'
+    return str(output_path)
+
 def create_pitch_plot(df_dribbles, player_id, player_name, team_name):
     """
     Create a pitch plot for a player.
@@ -25,8 +32,6 @@ def create_pitch_plot(df_dribbles, player_id, player_name, team_name):
     team_name: str
         The name of the team of the player to create the pitch plot for.
     """
-    # Get project root directory
-    project_root = Path(__file__).parent.parent
 
     # Filter dribbles for player
     df_player_dribbles = df_dribbles[df_dribbles['player_id'] == player_id]
@@ -186,7 +191,7 @@ def create_pitch_plot(df_dribbles, player_id, player_name, team_name):
     }
 
     # Generate output path, save figure and return figure and path
-    output_path = project_root / 'generated_images' / 'pitch_plots' / f'{player_id}.png'
+    output_path = create_pitch_path(player_id)
     fig.savefig(output_path, **default_kwargs)
     
     return fig, str(output_path)
