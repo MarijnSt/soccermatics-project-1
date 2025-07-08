@@ -40,10 +40,9 @@ st.title("Best dribblers at Euro 2024")
 st.write("This app analyzes the dribbling performance of players at Euro 2024.")
 
 # Minutes and dribbles filters
-col1, col2 = st.columns(2)
-with col1:
+with st.sidebar:
+    st.subheader("Filter players")
     minutes_played_filter = st.number_input("Minimum minutes played", min_value=0, max_value=900, value=270, step=1)
-with col2:
     dribbles_filter = st.number_input("Minimum dribbles", min_value=0, max_value=100, value=10, step=1)
 
 # Filter player stats
