@@ -4,23 +4,6 @@ import numpy as np
 from src.radar_plot import create_radar_plot
 from src.pitch_plot import create_pitch_plot
 
-# Get player stats
-df_player_stats = pd.read_parquet("data/player_stats.parquet")
-
-# Get dribbles
-df_dribbles = pd.read_parquet("data/dribbles.parquet")
-
-st.title("Best dribblers at Euro 2024")
-st.write("This app analyzes the dribbling performance of players at Euro 2024.")
-
-# Minutes and dribbles filters
-col1, col2 = st.columns(2)
-with col1:
-    minutes_played_filter = st.number_input("Minimum minutes played", min_value=0, max_value=900, value=270, step=1)
-with col2:
-    dribbles_filter = st.number_input("Minimum dribbles", min_value=0, max_value=100, value=10, step=1)
-
-# Filter player stats
 @st.cache_data
 def filter_player_stats(df_player_stats, minutes_played_filter, dribbles_filter):
     df = df_player_stats.copy()
@@ -36,6 +19,34 @@ def filter_player_stats(df_player_stats, minutes_played_filter, dribbles_filter)
 
     return df
 
+
+@st.cache_data(show_spinner="Creating radar plot...")
+def show_radar_plot(df, player_id, minutes_played_filter, dribbles_filter):
+    fig, path = create_radar_plot(df, player_id, minutes_played_filter, dribbles_filter)
+    return fig, path
+
+
+@st.cache_data(show_spinner="Creating pitch plot...")
+def show_pitch_plot(df_dribbles, player_id, player_name, team_name):
+    fig, path = create_pitch_plot(df_dribbles, player_id, player_name, team_name)
+    return fig, path
+
+
+# Get player stats and dribbles
+df_player_stats = pd.read_parquet("data/player_stats.parquet")
+df_dribbles = pd.read_parquet("data/dribbles.parquet")
+
+st.title("Best dribblers at Euro 2024")
+st.write("This app analyzes the dribbling performance of players at Euro 2024.")
+
+# Minutes and dribbles filters
+col1, col2 = st.columns(2)
+with col1:
+    minutes_played_filter = st.number_input("Minimum minutes played", min_value=0, max_value=900, value=270, step=1)
+with col2:
+    dribbles_filter = st.number_input("Minimum dribbles", min_value=0, max_value=100, value=10, step=1)
+
+# Filter player stats
 df_player_stats_filtered = filter_player_stats(df_player_stats, minutes_played_filter, dribbles_filter)
 st.write(f"Number of players: {len(df_player_stats_filtered)}")
 
@@ -143,21 +154,11 @@ selected_player_team = df_player_stats_filtered.iloc[selected_id]["team_name"]
 st.write(f"Selected player: {selected_player_id} - {selected_player_name} ({selected_player_team})")
 
 # Show radar plot
-@st.cache_data(show_spinner="Creating radar plot...")
-def show_radar_plot(df, player_id, minutes_played_filter, dribbles_filter):
-    fig, path = create_radar_plot(df, player_id, minutes_played_filter, dribbles_filter)
-    return fig, path
-
 fig, path = show_radar_plot(df_player_stats_filtered, selected_player_id, minutes_played_filter, dribbles_filter)
 st.pyplot(fig)
 st.image(path)
 
 # Show pitch plot
-@st.cache_data(show_spinner="Creating pitch plot...")
-def show_pitch_plot(df_dribbles, player_id, player_name, team_name):
-    fig, path = create_pitch_plot(df_dribbles, player_id, player_name, team_name)
-    return fig, path
-
 fig, path = show_pitch_plot(df_dribbles, selected_player_id, selected_player_name, selected_player_team)
 st.pyplot(fig)
 st.image(path)
