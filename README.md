@@ -7,3 +7,10 @@ Statsbomb has open data for Euro 2024 and I quickly chose to analyse Doku's drib
 You can read my analysis [here](https://www.linkedin.com/in/marijn-stammeleer).
 
 I also developed a Streamlit app where you can generate the important plots for other players. You can find that [here](https://dribblers-euro-2024.streamlit.app).
+
+
+### Important files/folder in this repository;
+* dribble_analysis.py: Streamlit app that generates the two visualisations I made for this analysis
+* src/: contain all the functions used to get the data from StatsBomb, transform it and use it to create visualisations
+* notebooks/radar_plot.ipynb: notebook used to create and test out the radar plot to compare player stats
+* notebooks/pitch_plot.ipynb: notebook used to create and test out pitch plot to show all dribbles of a player
