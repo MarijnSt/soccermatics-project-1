@@ -6,6 +6,7 @@ import matplotlib.pyplot as plt
 from matplotlib.offsetbox import OffsetImage, AnnotationBbox
 import matplotlib.image as mpimg
 from mplsoccer import PyPizza
+from pathlib import Path
 
 from src.data_plots import calculate_radar_plot_data
 
@@ -30,6 +31,8 @@ def create_radar_plot(df, player_id, minutes_played_filter, dribbles_filter):
     fig: matplotlib.figure.Figure
         The radar plot.
     """ 
+    # Get project root directory
+    project_root = Path(__file__).parent.parent
 
     # Get player and team name
     team_name = df.loc[df["player_id"] == player_id, "team_name"].values[0]
@@ -94,7 +97,7 @@ def create_radar_plot(df, player_id, minutes_played_filter, dribbles_filter):
     heading_ax.text(0.01, 0.55, f'Per 90 stats vs other dribblers* at Euro 2024', fontsize=p_size, ha='left', va='center', alpha=alpha)
 
     # Add Euros 2024 logo
-    logo = mpimg.imread('euro_2024_logo.png')
+    logo = mpimg.imread(project_root / 'assets' / 'euro_2024_logo.png')
     imagebox = OffsetImage(logo, zoom=0.2)
     ab = AnnotationBbox(imagebox, (0.98, 0.7), xycoords='axes fraction', box_alignment=(1, 0.5), frameon=False)
     heading_ax.add_artist(ab)
@@ -176,9 +179,8 @@ def create_radar_plot(df, player_id, minutes_played_filter, dribbles_filter):
         'dpi': 300
     }
     
-    # convert player name to lowercase and replace spaces with underscores
-    player_name_filename = player_name.lower().replace(" ", "_")
-    path = f'generated_images/radar_plots/{player_name_filename}_{minutes_played_filter}min_{dribbles_filter}dribbles_radar.png'
-    fig.savefig(path, **default_kwargs)
+    # Generate output path, save figure and return figure and path
+    output_path = project_root / 'generated_images' / 'radar_plots' / f'{player_id}_{minutes_played_filter}min_{dribbles_filter}drib.png'
+    fig.savefig(output_path, **default_kwargs)
     
-    return fig, path
+    return fig, str(output_path)

@@ -7,6 +7,7 @@ from matplotlib.offsetbox import OffsetImage, AnnotationBbox
 import matplotlib.image as mpimg
 from mplsoccer import Pitch
 import numpy as np
+from pathlib import Path
 
 def create_pitch_plot(df_dribbles, df_player_info, player_id):
     """
@@ -21,6 +22,8 @@ def create_pitch_plot(df_dribbles, df_player_info, player_id):
     player_id: int
         The id of the player to create the pitch plot for.
     """
+    # Get project root directory
+    project_root = Path(__file__).parent.parent
 
     # Get player and team name
     team_name = df_player_info.loc[df_player_info["player_id"] == player_id, "team_name"].values[0]
@@ -85,7 +88,7 @@ def create_pitch_plot(df_dribbles, df_player_info, player_id):
     heading_ax.text(0.055, 0.2, f'All dribbles at Euro 2024', fontsize=p_size, ha='left', va='center', alpha=alpha)
 
     # Add Euros 2024 logo
-    logo = mpimg.imread('../euro_2024_logo.png')
+    logo = mpimg.imread(project_root / 'assets' / 'euro_2024_logo.png')
     imagebox = OffsetImage(logo, zoom=0.2)
     ab = AnnotationBbox(
         imagebox, 
@@ -167,9 +170,9 @@ def create_pitch_plot(df_dribbles, df_player_info, player_id):
         'facecolor': background_color,
         'dpi': 300
     }
-    
-    # convert player name to lowercase and replace spaces with underscores
-    player_name_filename = player_name.lower().replace(" ", "_")
 
-    fig.savefig(f'../generated_images/pitch_plots/{player_name_filename}_pitch.png', **default_kwargs)
-    plt.show()
+    # Generate output path, save figure and return figure and path
+    output_path = project_root / 'generated_images' / 'pitch_plots' / f'{player_id}.png'
+    fig.savefig(output_path, **default_kwargs)
+    
+    return fig, str(output_path)

@@ -147,6 +147,7 @@ def show_radar_plot(df, player_id, minutes_played_filter, dribbles_filter):
 
 fig, path = show_radar_plot(df_player_stats_filtered, selected_player_id, minutes_played_filter, dribbles_filter)
 st.pyplot(fig)
+st.write(path)
 st.image(path)
 
 
