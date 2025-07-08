@@ -187,4 +187,4 @@ with st.spinner("Generating pitch plot..."):
     st.image(pitch_path)
     #st.pyplot(fig)
     st.write(f"This pitch plot shows all the dribbles of {selected_player_name} at Euro 2024. It shows successful, failed and danger dribbles.")
-    st.write(f"Danger dribbles are dribbles that lead to a shot within 15 seconds and are their size is scaled according to the xG of the shot.")
+    st.write(f"Danger dribbles are dribbles that ended in a shot within 15 seconds. The size of the dribble points is scaled according to the xG of the shot.")
