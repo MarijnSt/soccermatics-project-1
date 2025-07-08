@@ -165,10 +165,10 @@ selected_player_team = df_player_stats_filtered.iloc[selected_id]["team_name"]
 
 # Show radar plot
 fig, path = show_radar_plot(df_player_stats_filtered, selected_player_id, position_filter, minutes_played_filter, dribbles_filter)
-st.pyplot(fig)
+#st.pyplot(fig)
 st.image(path)
 
 # Show pitch plot
 fig, path = show_pitch_plot(df_dribbles, selected_player_id, selected_player_name, selected_player_team)
-st.pyplot(fig)
+#st.pyplot(fig)
 st.image(path)
