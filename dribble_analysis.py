@@ -50,7 +50,6 @@ df_player_stats_filtered = filter_player_stats(df_player_stats, minutes_played_f
 # st.write(f"Number of players: {len(df_player_stats_filtered)}")
 
 # Select a player
-st.subheader(f"Select a player to see their stats and dribbles")
 selected_player = st.dataframe(
     df_player_stats_filtered,
     column_config={
