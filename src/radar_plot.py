@@ -5,6 +5,7 @@ This module contains functions to create radar plots.
 import matplotlib.pyplot as plt
 from matplotlib.offsetbox import OffsetImage, AnnotationBbox
 import matplotlib.image as mpimg
+from matplotlib import font_manager
 from mplsoccer import PyPizza
 from pathlib import Path
 
@@ -54,7 +55,6 @@ def create_radar_plot(df, player_id, minutes_played_filter, dribbles_filter):
     danger_dribble_stats_color = "#CA2E55"
 
     # Text styles
-    font = 'Futura'
     h1_size = 18
     h2_size = 16
     h3_size = 14
@@ -62,8 +62,12 @@ def create_radar_plot(df, player_id, minutes_played_filter, dribbles_filter):
     label_size = 8
     alpha = 0.4
 
+    # Load font
+    font_manager.fontManager.addfont('assets/Futura.ttc')
+    prop = font_manager.FontProperties(fname='assets/Futura.ttc')
+
     # Apply styling
-    plt.rcParams['font.family'] = font
+    plt.rcParams['font.family'] = prop.get_name()
     plt.rcParams.update({
         'text.color': dark_color,
         'axes.labelcolor': dark_color,
