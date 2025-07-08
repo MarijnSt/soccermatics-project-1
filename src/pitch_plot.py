@@ -9,7 +9,7 @@ from mplsoccer import Pitch
 import numpy as np
 from pathlib import Path
 
-def create_pitch_plot(df_dribbles, df_player_info, player_id):
+def create_pitch_plot(df_dribbles, player_id, player_name, team_name):
     """
     Create a pitch plot for a player.
 
@@ -17,17 +17,15 @@ def create_pitch_plot(df_dribbles, df_player_info, player_id):
     ----------
     df_dribbles: pd.DataFrame
         The dataframe with all dribbles of the season.
-    df_player_info: pd.DataFrame
-        The dataframe with player info.
     player_id: int
         The id of the player to create the pitch plot for.
+    player_name: str
+        The name of the player to create the pitch plot for.
+    team_name: str
+        The name of the team of the player to create the pitch plot for.
     """
     # Get project root directory
     project_root = Path(__file__).parent.parent
-
-    # Get player and team name
-    team_name = df_player_info.loc[df_player_info["player_id"] == player_id, "team_name"].values[0]
-    player_name = df_player_info.loc[df_player_info["player_id"] == player_id, "player_short_name"].values[0]
 
     # Filter dribbles for player
     df_player_dribbles = df_dribbles[df_dribbles['player_id'] == player_id]
