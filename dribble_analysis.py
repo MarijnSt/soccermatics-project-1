@@ -2,6 +2,7 @@ import streamlit as st
 import pandas as pd
 import numpy as np
 from src.radar_plot import create_radar_plot
+from src.pitch_plot import create_pitch_plot
 
 # Get player stats
 df_player_stats = pd.read_parquet("data/player_stats.parquet")
@@ -134,10 +135,12 @@ if not selected_player["selection"]["rows"]:
     st.info("Select a player to proceed with the analysis.")
     st.stop()
 
-# Get dribbles for the selected player
+# Get stats for the selected player
 selected_id = selected_player["selection"]["rows"][0]
 selected_player_id = df_player_stats_filtered.iloc[selected_id]["player_id"]
-st.write(f"Selected player: {selected_player_id}")
+selected_player_name = df_player_stats_filtered.iloc[selected_id]["player_short_name"]
+selected_player_team = df_player_stats_filtered.iloc[selected_id]["team_name"]
+st.write(f"Selected player: {selected_player_id} - {selected_player_name} ({selected_player_team})")
 
 # Show radar plot
 @st.cache_data(show_spinner="Creating radar plot...")
@@ -147,10 +150,14 @@ def show_radar_plot(df, player_id, minutes_played_filter, dribbles_filter):
 
 fig, path = show_radar_plot(df_player_stats_filtered, selected_player_id, minutes_played_filter, dribbles_filter)
 st.pyplot(fig)
-st.write(path)
 st.image(path)
 
+# Show pitch plot
+@st.cache_data(show_spinner="Creating pitch plot...")
+def show_pitch_plot(df_dribbles, player_id, player_name, team_name):
+    fig, path = create_pitch_plot(df_dribbles, player_id, player_name, team_name)
+    return fig, path
 
-
-# st.dataframe(df_dribbles)
-# st.write(f"Number of dribbles: {len(df_dribbles)}")
+fig, path = show_pitch_plot(df_dribbles, selected_player_id, selected_player_name, selected_player_team)
+st.pyplot(fig)
+st.image(path)
