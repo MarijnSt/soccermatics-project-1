@@ -152,20 +152,20 @@ def create_pitch_plot(df_dribbles, player_id, player_name, team_name):
     # Completed dribbles
     total_completed_dribbles = len(df_player_dribbles[df_player_dribbles['outcome_name'] == "Complete"])
     legend_ax.scatter(0.05, 0.84, c=dark_color, s=400)
-    legend_ax.text(0.05, 0.81, total_completed_dribbles, fontsize=label_size, ha='center', va='center', color=background_color)
-    legend_ax.text(0.08, 0.81, 'Completed dribbles', fontsize=p_size, ha='left', va='center', color=dark_color)
+    legend_ax.text(0.05, 0.8275, total_completed_dribbles, fontsize=label_size, ha='center', va='center', color=background_color)
+    legend_ax.text(0.08, 0.8275, 'Completed dribbles', fontsize=p_size, ha='left', va='center', color=dark_color)
     
     # Danger dribbles
     total_danger_dribbles = len(df_player_dribbles[df_player_dribbles['danger_dribble'] == True])
     legend_ax.scatter(0.43, 0.84, c=danger_dribble_color, s=400)
-    legend_ax.text(0.43, 0.81, total_danger_dribbles, fontsize=label_size, ha='center', va='center', color=background_color)
-    legend_ax.text(0.46, 0.81, 'Danger dribbles', fontsize=p_size, ha='left', va='center', color=danger_dribble_color)
+    legend_ax.text(0.43, 0.8275, total_danger_dribbles, fontsize=label_size, ha='center', va='center', color=background_color)
+    legend_ax.text(0.46, 0.8275, 'Danger dribbles', fontsize=p_size, ha='left', va='center', color=danger_dribble_color)
     
     # Failed dribbles
     total_failed_dribbles = len(df_player_dribbles[df_player_dribbles['outcome_name'] == "Incomplete"])
     legend_ax.scatter(0.795, 0.84, c=dark_color, s=400, alpha=alpha, edgecolors='none')
-    legend_ax.text(0.795, 0.81, total_failed_dribbles, fontsize=label_size, ha='center', va='center', color=background_color)
-    legend_ax.text(0.825, 0.81, 'Failed dribbles', fontsize=p_size, ha='left', va='center', color=dark_color, alpha=alpha)
+    legend_ax.text(0.7945, 0.8275, total_failed_dribbles, fontsize=label_size, ha='center', va='center', color=background_color)
+    legend_ax.text(0.825, 0.8275, 'Failed dribbles', fontsize=p_size, ha='left', va='center', color=dark_color, alpha=alpha)
 
     # xG
     legend_ax.scatter(0.385, 0.2, c=danger_dribble_color, s=100)
