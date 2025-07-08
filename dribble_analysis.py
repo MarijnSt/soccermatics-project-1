@@ -31,12 +31,9 @@ def filter_player_stats(df_player_stats, position_filter, minutes_played_filter,
 def show_radar_plot(df, player_id, position_filter, minutes_played_filter, dribbles_filter):
     # Check if plot already exists
     plot_path = create_radar_path(player_id, position_filter, minutes_played_filter, dribbles_filter)
-    print(plot_path)
     if os.path.exists(plot_path):
-        print("Radar already exists")
         return plot_path
 
-    print("Creating radar plot")
     fig, path = create_radar_plot(df, player_id, position_filter, minutes_played_filter, dribbles_filter)
     return path
 
@@ -44,12 +41,9 @@ def show_radar_plot(df, player_id, position_filter, minutes_played_filter, dribb
 def get_pitch_path(df_dribbles, player_id, player_name, team_name):
     # Check if plot already exists
     plot_path = create_pitch_path(player_id)
-    print(plot_path)
     if os.path.exists(plot_path):
-        print("Pitch already exists")
         return plot_path
 
-    print("Creating pitch plot")
     fig, path = create_pitch_plot(df_dribbles, player_id, player_name, team_name)
     return path
 
@@ -59,7 +53,7 @@ df_player_stats = pd.read_parquet("data/player_stats.parquet")
 df_dribbles = pd.read_parquet("data/dribbles.parquet")
 
 st.title("Best dribblers at Euro 2024")
-st.write("This app analyzes the dribbling performance of players at Euro 2024.")
+st.write("This app generates radar and pitch plots for the dribbling performance of players at Euro 2024.")
 
 # Minutes and dribbles filters
 with st.sidebar:
@@ -178,12 +172,19 @@ selected_player_name = df_player_stats_filtered.iloc[selected_id]["player_short_
 selected_player_team = df_player_stats_filtered.iloc[selected_id]["team_name"]
 # st.write(f"Selected player: {selected_player_id} - {selected_player_name} ({selected_player_team})")
 
-# Show radar plot
-radar_path = show_radar_plot(df_player_stats_filtered, selected_player_id, position_filter, minutes_played_filter, dribbles_filter)
-st.image(radar_path)
-#st.pyplot(fig)
+with st.spinner("Generating radar plot..."):
+    # Show radar plot
+    radar_path = show_radar_plot(df_player_stats_filtered, selected_player_id, position_filter, minutes_played_filter, dribbles_filter)
+    st.image(radar_path)
+    #st.pyplot(fig)
+    st.write(f"This radar plot shows how {selected_player_name} performed compared to other players from the table at the top of the page. Changing the player filters will also change this plot.")
+    st.write(f"All stats are normalized to per 90 minutes. This gives a better comparison of players with different playing times.")
+    st.write(f"Scores at the outer edge of the radar plot are among the best, while scores at the inner edge are among the worst compared to the other players.")
 
-# Show pitch plot
-pitch_path = get_pitch_path(df_dribbles, selected_player_id, selected_player_name, selected_player_team)
-st.image(pitch_path)
-#st.pyplot(fig)
+with st.spinner("Generating pitch plot..."):
+    # Show pitch plot
+    pitch_path = get_pitch_path(df_dribbles, selected_player_id, selected_player_name, selected_player_team)
+    st.image(pitch_path)
+    #st.pyplot(fig)
+    st.write(f"This pitch plot shows all the dribbles of {selected_player_name} at Euro 2024. It shows successful, failed and danger dribbles.")
+    st.write(f"Danger dribbles are dribbles that lead to a shot within 15 seconds and are their size is scaled according to the xG of the shot.")
