@@ -169,7 +169,7 @@ def create_radar_plot(df, player_id, minutes_played_filter, dribbles_filter):
     # LEGEND
     legend_ax.text(0.01, 0.25, f'*: players with at least {minutes_played_filter} minutes and {dribbles_filter} attempted dribbles', fontsize=label_size, ha='left', va='center', alpha=alpha)
     legend_ax.text(0.01, 0.01, 'Danger dribbles: dribbles that end in a shot within 15 seconds', fontsize=label_size, ha='left', va='center', alpha=alpha)
-    legend_ax.text(0.99, 0.01, 'Data from StatsBomb', fontsize=label_size, ha='right', va='center', alpha=alpha)
+    legend_ax.text(0.99, 0.01, 'Data provided by StatsBomb', fontsize=label_size, ha='right', va='center', alpha=alpha)
 
     # Save plot
     default_kwargs = {
